@@ -18,6 +18,35 @@ const io = new Server(server,{
     },
 });
 
+const rooms = {}//roomid => {socket.id,username,userId}
+
+io.on("connection",(socket)=>{
+    
+    socket.on("create-room",({roomId,userName,userId})=>{
+        if(!rooms[roomId]){
+            rooms[roomId] = [];
+            socket.join(roomId);
+            rooms[roomId].push({socketId:socket.id,userName,userId});
+            
+            io.to(socket.id).emit("server-msg","Room has been created Succesfully");
+        }
+        else{
+            io.to(socket.id).emit("server-msg","Room has Already created try another name!!!");
+        }
+    });
+
+    socket.on("join-room",({roomId,userName,userId})=>{
+        if(!rooms[roomId]){
+            io.to(socket.id).emit("server-msg","Room does not exists");
+        }
+        else{
+            socket.join(roomId);
+            rooms[roomId].push({socketId:socket.id,userName,userId});
+            io.to(socket.id).emit("server-msg",`${roomId} has been joined succesfully`);
+        }
+    });
+})
+
 const PORT = process.env.PORT || 5000;
 
 app.use('/api/test',testRouter);
