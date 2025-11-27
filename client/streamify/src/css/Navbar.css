@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&family=Cabin:ital,wght@0,400..700;1,400..700&family=Great+Vibes&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Martel+Sans:wght@200;300;400;600;700;800;900&family=WDXL+Lubrifont+SC&display=swap');
+
+.navbar{
+    height:10%;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0px 50px;
+
+    border-bottom: 0.5px solid #e0e0e0; /* Subtle gray bottom border */
+    
+}
+
+#left-navbar{
+    width:20%;
+    display:flex;
+    flex-direction:row-reverse;
+    justify-content:space-around;
+    padding:0px 50px;
+}
+
+#logo{
+    font-family: 'Great Vibes', monospace;
+    font-size: 25px;
+    font-weight: 400;
+}
+
+#left-navbar a {
+  text-decoration: none;
+  color: #f8f7f7;
+  margin-left: 20px;
+  font-weight: 400;
+  font-family: 'Inter', sans-serif;
+  padding: 8px 16px;
+  border-radius: 9999px;         /* Makes it oval */
+  transition: all 1.0s ease;
+}
+
+#left-navbar a:hover {
+  background-color: #fff;        /* White background on hover */
+  color: #000;                   /* Black text on hover */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05); /* Soft shadow */
+  cursor: pointer;
+}
