@@ -21,8 +21,8 @@ const io = new Server(server,{
 const rooms = {}//roomid => {socket.id,username,userId}
 
 io.on("connection",(socket)=>{
-    
     socket.on("create-room",({roomId,userName,userId})=>{
+        // console.log({roomId,userName,userId});
         if(!rooms[roomId]){
             rooms[roomId] = [];
             socket.join(roomId);
@@ -36,15 +36,40 @@ io.on("connection",(socket)=>{
     });
 
     socket.on("join-room",({roomId,userName,userId})=>{
+        // console.log({roomId,userName,userId});
         if(!rooms[roomId]){
             io.to(socket.id).emit("server-msg","Room does not exists");
         }
         else{
             socket.join(roomId);
+            io.to(socket.id).emit("user-list",{userList:rooms[roomId]});
             rooms[roomId].push({socketId:socket.id,userName,userId});
             io.to(socket.id).emit("server-msg",`${roomId} has been joined succesfully`);
+            io.to(roomId).emit("new-joinee",{socketId:socket.id});
         }
     });
+
+    socket.on("leave-room",({roomId})=>{
+        socket.leave({roomId});
+        if(rooms[roomId].length <= 0){
+            delete rooms[roomId];
+        }
+        else{
+            socket.to(roomId).emit("server-msg",`${userName} has left the room`);
+        }
+    });
+
+    socket.on("offer",({offer,from,to})=>{
+        io.to(to).emit("offer",{offer,from,to});
+    });
+
+    socket.on("answer",({answer,from,to})=>{
+        io.to(to).emit("answer",{answer,from,to});
+    });
+
+    socket.on("ice-candidate",({candidate,from,to})=>{
+        io.to(to).emit("ice-candidate",({candidate,from,to}));
+    })
 })
 
 const PORT = process.env.PORT || 5000;
